@@ -11,25 +11,26 @@ struct BookListView: View {
     @StateObject private var bookListViewModel: BookListViewModel = .init()
     
     var body: some View {
-        VStack {
-            List(bookListViewModel.books, id: \.isbn13) { book in
-                NavigationLink(destination: BookDetailView()) {
-                    BookListRowView(title: book.title, isbn: book.isbn13)
-                        .onAppear {
-                            print("--- row: \(book.title) ---")
-                            bookListViewModel.fetchBooksIfNeeded(currentBook: book)
-                        }
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                ForEach(bookListViewModel.books, id: \.isbn13) { book in
+                    NavigationLink(destination: BookDetailView()) {
+                        BookListRowView(title: book.title, isbn: book.isbn13)
+                            .onAppear {
+                                print("--- row: \(book.title) ---")
+                                bookListViewModel.fetchBooksIfNeeded(currentBook: book)
+                            }
+                    }
                 }
-            }
-            .listStyle(.plain)
-            .onAppear {
-                print("--- Appear ---")
-                bookListViewModel.fetchBooksIfNeeded(currentBook: nil)
             }
             
             if bookListViewModel.isFetchingPage {
                 ProgressView()
             }
+        }
+        .onAppear {
+            print("--- Appear ---")
+            bookListViewModel.fetchBooksIfNeeded(currentBook: nil)
         }
     }
 }
