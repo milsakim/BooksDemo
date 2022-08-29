@@ -14,7 +14,7 @@ class BookListViewModel: ObservableObject {
     
     let bookSearchRequestable: BookStoreRequestable = .init()
     
-    var searchKeyword: String? = "data"
+    private var searchKeyword: String? = "data"
     
     private var currentPage: Int = 1 {
         didSet {
@@ -28,6 +28,27 @@ class BookListViewModel: ObservableObject {
     
     deinit {
         print("--- BookListViewModel deinit ---")
+    }
+    
+    // MARK: - Setting Search Keyword Related Methods
+    
+    func setSearchKeyword(to newKeyword: String) {
+        guard let searchKeyword = searchKeyword else {
+            searchKeyword = newKeyword
+            fetchMoreBooks(with: newKeyword)
+            return
+        }
+
+        // 현재 키워드와 동일한 경우
+        if searchKeyword == newKeyword {
+            return
+        }
+        else {
+            self.searchKeyword = newKeyword
+            books.removeAll()
+            currentPage = 1
+            fetchMoreBooks(with: newKeyword)
+        }
     }
     
     // MARK: - Data Fetch Related Methods
