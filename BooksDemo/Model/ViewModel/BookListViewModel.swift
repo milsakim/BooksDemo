@@ -14,7 +14,7 @@ class BookListViewModel: ObservableObject {
     
     let bookSearchRequestable: BookStoreRequestable = .init()
     
-    var searchKeyword: String? = "swift"
+    var searchKeyword: String? = "data"
     
     private var currentPage: Int = 1 {
         didSet {
@@ -29,6 +29,8 @@ class BookListViewModel: ObservableObject {
     deinit {
         print("--- BookListViewModel deinit ---")
     }
+    
+    // MARK: - Data Fetch Related Methods
     
     func fetchBooksIfNeeded(currentBook book: Book?) {
         guard let book = book, let searchKeyword = searchKeyword else {

@@ -14,7 +14,9 @@ struct BookListRowView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
+                .background(Color.red)
             Text(isbn)
+            Divider()
         }
     }
 }

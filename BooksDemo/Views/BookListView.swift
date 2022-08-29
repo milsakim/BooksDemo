@@ -32,6 +32,29 @@ struct BookListView: View {
             print("--- Appear ---")
             bookListViewModel.fetchBooksIfNeeded(currentBook: nil)
         }
+        
+        /*
+        VStack {
+            List(bookListViewModel.books, id: \.isbn13) { book in
+                NavigationLink(destination: BookDetailView()) {
+                    BookListRowView(title: book.title, isbn: book.isbn13)
+                        .onAppear {
+                            print("--- row: \(book.title) ---")
+                            bookListViewModel.fetchBooksIfNeeded(currentBook: book)
+                        }
+                }
+            }
+            .listStyle(.plain)
+            .onAppear {
+                print("--- Appear ---")
+                bookListViewModel.fetchBooksIfNeeded(currentBook: nil)
+            }
+            
+            if bookListViewModel.isFetchingPage {
+                ProgressView()
+            }
+        }
+        */
     }
 }
 
