@@ -12,13 +12,15 @@ class BookListViewModel: ObservableObject {
     @Published var books: [Book] = []
     @Published var isFetchingPage: Bool = false
     
-    let bookSearchRequestable: BookStoreRequestable = .init()
+    var bookSearchRequestable: BookStoreRequestable = BookStoreRequestable(searchKeyword: "data")
     
     private var searchKeyword: String? = "data"
     
     private var currentPage: Int = 1 {
         didSet {
             print("--- current page: \(currentPage) ---")
+            bookSearchRequestable.pageIndex = currentPage
+            
         }
     }
     private var canFetchMorePages: Bool = true
@@ -35,7 +37,10 @@ class BookListViewModel: ObservableObject {
     func setSearchKeyword(to newKeyword: String) {
         guard let searchKeyword = searchKeyword else {
             searchKeyword = newKeyword
+            bookSearchRequestable.searchKeyword = newKeyword
+            
             fetchMoreBooks(with: newKeyword)
+            
             return
         }
 
@@ -45,6 +50,7 @@ class BookListViewModel: ObservableObject {
         }
         else {
             self.searchKeyword = newKeyword
+            bookSearchRequestable.searchKeyword = newKeyword
             books.removeAll()
             currentPage = 1
             fetchMoreBooks(with: newKeyword)
@@ -72,9 +78,7 @@ class BookListViewModel: ObservableObject {
         
         isFetchingPage = true
         
-        let requestModel: RequestModel = RequestModel(endPoint: BookStoreSearchEndPoint(searchKeyword: keyword, page: currentPage))
-        
-        bookSearchRequestable.request(requestModel) { result in
+        bookSearchRequestable.request { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {

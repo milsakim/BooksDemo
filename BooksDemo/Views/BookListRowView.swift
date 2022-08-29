@@ -10,13 +10,27 @@ import SwiftUI
 struct BookListRowView: View {
     var title: String
     var isbn: String
+    var uiImage: UIImage?
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(title)
-                .background(Color.red)
-            Text(isbn)
-            Divider()
+        HStack(alignment: .center) {
+            if let uiImage = uiImage {
+                Image(uiImage: uiImage)
+            }
+            else {
+                Image(systemName: "x.circle")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60)
+            }
+            
+            VStack(alignment: .leading) {
+                Text(title)
+                    .background(Color.red)
+                Text(isbn)
+            }
+            
+            Spacer()
         }
     }
 }
