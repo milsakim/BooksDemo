@@ -64,4 +64,20 @@ class BookStoreRequestable: NetworkRequestable {
         
         dataTask.resume()
     }
+    
+    func request(_ request: RequestModel) async throws -> SearchResponse {
+        guard let bookStoreRequest: URLRequest = request.getUrlRequest() else {
+            throw BookSearchAPIError.urlRequestError
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: bookStoreRequest)
+        
+        guard let httpResponse: HTTPURLResponse = response as? HTTPURLResponse, 200...299 ~= httpResponse.statusCode else {
+            throw BookSearchAPIError.httpError
+        }
+        
+        let decodedData: SearchResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
+        
+        return decodedData
+    }
 }
