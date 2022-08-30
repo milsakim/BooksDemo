@@ -10,24 +10,26 @@ import SwiftUI
 struct BookListRowView: View {
     var title: String
     var isbn: String
-    var uiImage: UIImage?
+    var urlString: String
     
     var body: some View {
         HStack(alignment: .center) {
-            if let uiImage = uiImage {
-                Image(uiImage: uiImage)
-            }
-            else {
-                Image(systemName: "x.circle")
+            AsyncImage(url: URL(string: urlString)) { image in
+                image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 60)
+                    .frame(width: 80, height: 120)
+            } placeholder: {
+                ProgressView()
+                    .frame(width: 80, height: 120)
             }
             
             VStack(alignment: .leading) {
                 Text(title)
-                    .background(Color.red)
+                    .bold()
                 Text(isbn)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
             
             Spacer()
@@ -37,6 +39,6 @@ struct BookListRowView: View {
 
 struct BookListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        BookListRowView(title: "Test Book", isbn: "Test isbn")
+        BookListRowView(title: "Test Book", isbn: "Test isbn", urlString: "https://itbook.store/img/books/9781118342329.png")
     }
 }
