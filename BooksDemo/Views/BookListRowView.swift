@@ -18,11 +18,10 @@ struct BookListRowView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 80, height: 120)
             } placeholder: {
                 ProgressView()
-                    .frame(width: 80, height: 120)
             }
+            .frame(width: 80, height: 120)
             
             VStack(alignment: .leading) {
                 Text(title)
