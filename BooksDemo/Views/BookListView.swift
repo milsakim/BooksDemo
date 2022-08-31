@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BookListView: View {
     @StateObject private var bookListViewModel: BookListViewModel = .init()
+    @State private var searchKeyword: String = ""
     
     var body: some View {
         ScrollView {
@@ -27,6 +28,11 @@ struct BookListView: View {
             if bookListViewModel.isFetchingPage {
                 ProgressView()
             }
+        }
+        .searchable(text: $searchKeyword)
+        .onSubmit(of: .search) {
+            print("--- submit!!!!!! ---")
+            bookListViewModel.setSearchKeyword(to: searchKeyword)
         }
         .onAppear {
             print("--- Appear ---")
@@ -59,8 +65,6 @@ struct BookListView: View {
 }
 
 struct BookListView_Previews: PreviewProvider {
-    @StateObject static var bookListViewModel: BookListViewModel = .init()
-    
     static var previews: some View {
         BookListView()
     }
