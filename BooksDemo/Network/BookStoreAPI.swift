@@ -21,3 +21,17 @@ class BookStoreRequestable: NetworkRequestable {
         self.searchKeyword = searchKeyword
     }
 }
+
+struct BookDetailAPI: NetworkRequestable {
+    typealias Response = BookDetailResponse
+    
+    var baseURL: String = "https://api.itbook.store/1.0/books/"
+    var path: String { "\(isbn)" }
+    var httpMethod: HTTPMethod = .get
+    
+    var isbn: String
+    
+    init(isbn: String) {
+        self.isbn = isbn
+    }
+}
