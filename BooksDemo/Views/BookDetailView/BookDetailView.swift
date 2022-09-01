@@ -35,7 +35,7 @@ struct BookDetailView: View {
                         .multilineTextAlignment(.center)
                     Text(bookDetailViewModel.bookDetail?.authors ?? "Unknown")
                     
-                    RatingView(rating: 5)
+                    RatingView(rating: Double(bookDetailViewModel.bookDetail?.rating ?? "unknown") ?? 0)
                         .padding()
                     
                     Button("GET") {
