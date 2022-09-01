@@ -10,6 +10,8 @@ import SwiftUI
 struct BookDetailView: View {
     @StateObject private var bookDetailViewModel: BookDetailViewModel
     
+    @Environment(\.openURL) var openURL
+    
     init(isbn: String) {
         _bookDetailViewModel = StateObject(wrappedValue: BookDetailViewModel(isbn: isbn))
     }
@@ -38,10 +40,22 @@ struct BookDetailView: View {
                     RatingView(rating: Double(bookDetailViewModel.bookDetail?.rating ?? "unknown") ?? 0)
                         .padding()
                     
-                    Button("GET") {
+                    Button {
                         print("--- button tapped ---")
+                        guard let urlString: String = bookDetailViewModel.bookDetail?.url, let url: URL = URL(string: urlString) else {
+                            return
+                        }
+                        
+                        openURL(url)
+                    } label: {
+                        Text("GET")
+                            .padding()
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.blue, lineWidth: 2)
+                            )
                     }
-                    .padding()
                     
                     BookInformationRowView(title: "Description", content: bookDetailViewModel.bookDetail?.desc ?? "Unknown", alignment: .leading)
                         .padding()
