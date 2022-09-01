@@ -95,8 +95,4 @@ class BookListViewModel: ObservableObject {
             }
         }
     }
-    
-    func clear() {
-        
-    }
 }
