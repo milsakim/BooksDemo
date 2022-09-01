@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BookStoreRequestable: NetworkRequestable {
+struct BookStoreAPI: NetworkRequestable {
     typealias Response = SearchResponse
     
     var baseURL: String = "https://api.itbook.store/1.0/search/"
@@ -15,11 +15,7 @@ class BookStoreRequestable: NetworkRequestable {
     var httpMethod: HTTPMethod = .get
     
     var searchKeyword: String
-    var pageIndex: Int = 1
-    
-    init(searchKeyword: String) {
-        self.searchKeyword = searchKeyword
-    }
+    var pageIndex: Int
 }
 
 struct BookDetailAPI: NetworkRequestable {
