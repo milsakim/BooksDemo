@@ -70,15 +70,10 @@ struct BookDetailView: View {
             .onAppear {
                 bookDetailViewModel.fetchBookDetailInformation()
             }
+            .opacity(bookDetailViewModel.bookDetail != nil ? 1 : 0)
             
-            Group {
-                Color.gray
-                    .opacity(0.3)
-                    .ignoresSafeArea()
-                
-                ProgressView()
-            }
-            .opacity(bookDetailViewModel.bookDetail != nil ? 0 : 1)
+            ProgressView()
+                .opacity(bookDetailViewModel.bookDetail != nil ? 0 : 1)
         }
     }
 }
