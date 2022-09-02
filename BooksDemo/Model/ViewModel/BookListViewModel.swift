@@ -12,17 +12,9 @@ class BookListViewModel: ObservableObject {
     @Published var books: [Book] = []
     @Published var isFetchingPage: Bool = false
     
-    var bookSearchRequestable: BookStoreRequestable = BookStoreRequestable(searchKeyword: "data")
+    private var searchKeyword: String?
     
-    private var searchKeyword: String? = "data"
-    
-    private var currentPage: Int = 1 {
-        didSet {
-            print("--- current page: \(currentPage) ---")
-            bookSearchRequestable.pageIndex = currentPage
-            
-        }
-    }
+    private var currentPage: Int = 0
     private var canFetchMorePages: Bool = true
     private var previousSearchKeyword: String?
     
@@ -35,9 +27,16 @@ class BookListViewModel: ObservableObject {
     // MARK: - Setting Search Keyword Related Methods
     
     func setSearchKeyword(to newKeyword: String) {
+        guard !newKeyword.isEmpty else {
+            books.removeAll()
+            currentPage = 0
+            isFetchingPage = false
+            canFetchMorePages = true
+            return
+        }
+        
         guard let searchKeyword = searchKeyword else {
             searchKeyword = newKeyword
-            bookSearchRequestable.searchKeyword = newKeyword
             
             fetchMoreBooks(with: newKeyword)
             
@@ -50,40 +49,29 @@ class BookListViewModel: ObservableObject {
         }
         else {
             self.searchKeyword = newKeyword
-            bookSearchRequestable.searchKeyword = newKeyword
             books.removeAll()
-            currentPage = 1
+            currentPage = 0
+            isFetchingPage = false
+            canFetchMorePages = true
             fetchMoreBooks(with: newKeyword)
         }
     }
     
     // MARK: - Data Fetch Related Methods
     
-    func fetchBooksIfNeeded(currentBook book: Book?) {
-        guard let book = book, let searchKeyword = searchKeyword else {
-            fetchMoreBooks(with: searchKeyword!)
-            return
-        }
-
-        let thresholdIndex = books.index(books.endIndex, offsetBy: -3)
-        if books.firstIndex(where: { $0.isbn13 == book.isbn13 }) == thresholdIndex {
-            fetchMoreBooks(with: searchKeyword)
-        }
-    }
-    
     func fetchMoreBooks(with keyword: String) {
-        guard !isFetchingPage && canFetchMorePages else {
+        guard !isFetchingPage && canFetchMorePages else {   
             return
         }
         
+        currentPage += 1
         isFetchingPage = true
         
-        bookSearchRequestable.request { result in
+        BookStoreAPI(searchKeyword: keyword, pageIndex: currentPage).request { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
                     self.isFetchingPage = false
-                    self.currentPage += 1
                     self.books.append(contentsOf: response.books)
                     self.canFetchMorePages = Int(response.total)! > self.books.count
                     
