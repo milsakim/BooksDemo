@@ -18,12 +18,16 @@ enum HTTPMethod {
     case get
 }
 
+/// baseURL(String 타입)과 path(String 타입)의 interpolation으로 URL을 생성하고 있음.
+/// 향후 encoding이 필요해질 경우 URLComponent로 변경할 예정임.
 protocol NetworkRequestable {
     associatedtype Response: Codable
     
     var baseURL: String { get }
     var path: String { get }
     var httpMethod: HTTPMethod { get }
+    
+    func parse(data: Data) throws -> Response
 }
 
 extension NetworkRequestable {
@@ -58,7 +62,7 @@ extension NetworkRequestable {
                 return
             }
             
-            guard let decodedResponse: Response = try? JSONDecoder().decode(Response.self, from: data) else {
+            guard let decodedResponse: Response = try? parse(data: data) else {
                 print("--- failed to decode ---")
                 completionHandler(.failure(NetworkRequestError.decodingError))
                 return

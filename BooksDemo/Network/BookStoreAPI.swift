@@ -16,6 +16,11 @@ struct BookStoreAPI: NetworkRequestable {
     
     var searchKeyword: String
     var pageIndex: Int
+    
+    func parse(data: Data) throws -> SearchResponse {
+        print("--- parse ---")
+        return try JSONDecoder().decode(SearchResponse.self, from: data)
+    }
 }
 
 struct BookDetailAPI: NetworkRequestable {
@@ -29,5 +34,9 @@ struct BookDetailAPI: NetworkRequestable {
     
     init(isbn: String) {
         self.isbn = isbn
+    }
+    
+    func parse(data: Data) throws -> BookDetailResponse {
+        return try JSONDecoder().decode(BookDetailResponse.self, from: data)
     }
 }
