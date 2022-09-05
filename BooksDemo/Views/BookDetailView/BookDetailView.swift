@@ -82,7 +82,7 @@ struct BookDetailView: View {
                 .padding()
             }
             .onAppear {
-                bookDetailViewModel.fetchBookDetailInformation()
+                bookDetailViewModel.fetchDetailInformation()
             }
             .opacity(bookDetailViewModel.bookDetail != nil ? 1 : 0)
             

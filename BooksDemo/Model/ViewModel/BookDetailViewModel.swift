@@ -29,17 +29,17 @@ class BookDetailViewModel: ObservableObject {
     
     // MARK: -
     
-    func fetchBookDetailInformation() {
-        print("--- \(#function) ---")
-        BookDetailAPI(isbn: isbn).request { result in
-            switch result {
-            case .success(let response):
-                print("--- response: \(response) ---")
-                DispatchQueue.main.async {
-                    self.bookDetail = response
+    func fetchDetailInformation() {
+        Task {
+            do {
+                let response: BookDetailResponse = try await BookDetailAPI(isbn: isbn).request()
+                
+                DispatchQueue.main.async { [weak self] in
+                    self?.bookDetail = response
                 }
-            case .failure(let error):
-                print("--- error: \(error) ---")
+            }
+            catch {
+                print("--- error ---")
             }
         }
     }
