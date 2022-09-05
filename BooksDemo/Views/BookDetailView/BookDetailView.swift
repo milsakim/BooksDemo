@@ -23,13 +23,12 @@ struct BookDetailView: View {
                     AsyncImage(url: URL(string: bookDetailViewModel.bookDetail?.image ?? "Unknown")) { image in
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
                     } placeholder: {
                         ProgressView()
                     }
-                    .frame(width: 240, height: 320)
+                    .frame(width: 180, height: 240)
                     .background(Color.red)
-                    .padding()
                     
                     Text(bookDetailViewModel.bookDetail?.title ?? "Unknown")
                         .font(.title)
@@ -56,9 +55,14 @@ struct BookDetailView: View {
                                     .stroke(Color.blue, lineWidth: 2)
                             )
                     }
+                    .padding([.bottom])
+                    
+                    Divider()
                     
                     BookInformationRowView(title: "Description", content: bookDetailViewModel.bookDetail?.desc ?? "Unknown", alignment: .leading)
                         .padding()
+                    
+                    Divider()
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -78,6 +82,7 @@ struct BookDetailView: View {
                                 .padding()
                         }
                     }
+                    .padding([.top])
                 }
                 .padding()
             }
