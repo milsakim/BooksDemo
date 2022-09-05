@@ -35,7 +35,7 @@ class BookListViewModel: ObservableObject {
             return
         }
         
-        guard let searchKeyword = searchKeyword else {
+        if searchKeyword == nil {
             searchKeyword = newKeyword
             
             fetchMoreBooks(with: newKeyword)
@@ -68,6 +68,11 @@ class BookListViewModel: ObservableObject {
         isFetchingPage = true
         
         BookStoreAPI(searchKeyword: keyword, pageIndex: currentPage).request { result in
+            guard keyword == self.searchKeyword else {
+                print("--- \(keyword) != \(self.searchKeyword) ---")
+                return
+            }
+            
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
@@ -75,11 +80,15 @@ class BookListViewModel: ObservableObject {
                     self.books.append(contentsOf: response.books)
                     self.canFetchMorePages = Int(response.total)! > self.books.count
                     
-                    print("--- \(self.books.count) ---")
+                    print("--- count of \(keyword) -> \(self.searchKeyword): \(self.books.count) ---")
                 }
                 print("--- response: \(response) ---")
             case .failure(let error):
                 print("--- error: \(error) ---")
+                DispatchQueue.main.async {
+                    self.isFetchingPage = false
+                    self.currentPage -= 1
+                }
             }
         }
     }
