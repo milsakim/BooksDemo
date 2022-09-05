@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BookListRowView: View {
     var title: String
-    var isbn: String
     var urlString: String
     
     var body: some View {
@@ -27,9 +26,6 @@ struct BookListRowView: View {
                 Text(title)
                     .bold()
                     .multilineTextAlignment(.leading)
-                Text(isbn)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
             
             Spacer()
@@ -39,6 +35,6 @@ struct BookListRowView: View {
 
 struct BookListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        BookListRowView(title: "Test Book", isbn: "Test isbn", urlString: "https://itbook.store/img/books/9781118342329.png")
+        BookListRowView(title: "Test Book", urlString: "https://itbook.store/img/books/9781118342329.png")
     }
 }

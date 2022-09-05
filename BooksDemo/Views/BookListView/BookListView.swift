@@ -17,7 +17,7 @@ struct BookListView: View {
                 LazyVStack(alignment: .leading) {
                     ForEach(bookListViewModel.books, id: \.isbn13) { book in
                         NavigationLink(destination: BookDetailView(isbn: book.isbn13)) {
-                            BookListRowView(title: book.title, isbn: book.isbn13, urlString: book.image)
+                            BookListRowView(title: book.title, urlString: book.image)
                         }
                     }
                     
