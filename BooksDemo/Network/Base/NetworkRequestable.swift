@@ -75,4 +75,19 @@ extension NetworkRequestable {
         dataTask.resume()
     }
     
+    func request() async throws -> Response {
+        guard let request: URLRequest = createURLRequest() else {
+            throw NetworkRequestError.urlRequestError
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse: HTTPURLResponse = response as? HTTPURLResponse, 200...299 ~= httpResponse.statusCode else {
+            throw NetworkRequestError.httpError
+        }
+        
+        let decodedData: Response = try parse(data: data)
+        
+        return decodedData
+    }
 }
