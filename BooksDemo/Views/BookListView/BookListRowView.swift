@@ -12,23 +12,27 @@ struct BookListRowView: View {
     var urlString: String
     
     var body: some View {
-        HStack(alignment: .center) {
-            AsyncImage(url: URL(string: urlString)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-            } placeholder: {
-                ProgressView()
+        VStack {
+            HStack(alignment: .center) {
+                AsyncImage(url: URL(string: urlString)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 80, height: 120)
+                
+                VStack(alignment: .leading) {
+                    Text(title)
+                        .bold()
+                        .multilineTextAlignment(.leading)
+                }
+                
+                Spacer()
             }
-            .frame(width: 80, height: 120)
             
-            VStack(alignment: .leading) {
-                Text(title)
-                    .bold()
-                    .multilineTextAlignment(.leading)
-            }
-            
-            Spacer()
+            Divider()       
         }
     }
 }
