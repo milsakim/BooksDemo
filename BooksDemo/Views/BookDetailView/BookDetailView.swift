@@ -86,13 +86,13 @@ struct BookDetailView: View {
                 }
                 .padding()
             }
-            .onAppear {
-                bookDetailViewModel.fetchDetailInformation()
-            }
             .opacity(bookDetailViewModel.bookDetail != nil ? 1 : 0)
             
             ProgressView()
                 .opacity(bookDetailViewModel.bookDetail != nil ? 0 : 1)
+        }
+        .onAppear {
+            bookDetailViewModel.fetchDetailInformation()
         }
     }
 }
