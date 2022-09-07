@@ -17,14 +17,14 @@ class BookDetailViewModel: ObservableObject {
     // MARK: - Initializer
     
     init(isbn: String) {
-        print("--- BookDetailViewModel init ---")
+        print("--- BookDetailViewModel init: \(isbn) ---")
         self.isbn = isbn
     }
     
     // MARK: - Deinitializer
     
     deinit {
-        print("--- BookDetailViewModel deinit ---")
+        print("--- BookDetailViewModel deinit: \(bookDetail?.title) \(isbn) ---")
     }
     
     // MARK: -
@@ -34,8 +34,8 @@ class BookDetailViewModel: ObservableObject {
             do {
                 let response: BookDetailResponse = try await BookDetailAPI(isbn: isbn).request()
                 
-                DispatchQueue.main.async { [weak self] in
-                    self?.bookDetail = response
+                DispatchQueue.main.async {
+                    self.bookDetail = response
                 }
             }
             catch {
